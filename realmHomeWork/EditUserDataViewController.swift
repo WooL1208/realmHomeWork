@@ -25,7 +25,6 @@ class EditUserDataViewController: UIViewController, UIImagePickerControllerDeleg
     let picker: UIImagePickerController = UIImagePickerController()
     let realmEvent = RealmEvent()
     let addUserController = AddUserController()
-    
     var imageData = Data()
     var uuid = ""
     var nowIndexPath = 0
@@ -59,10 +58,9 @@ class EditUserDataViewController: UIViewController, UIImagePickerControllerDeleg
         if addUserController.isPassed == false {
             alert(nowMessage: addUserController.errorCode)
         } else {
-            dismiss(animated: true, completion: nil)
+            self.navigationController?.popViewController(animated: true)
         }
     }
-    
     
     @IBAction func doClean(_ sender: Any) {
         

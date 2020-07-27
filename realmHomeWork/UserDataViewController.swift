@@ -19,6 +19,11 @@ class UserDataViewController: UIViewController, UITableViewDelegate, UITableView
         realmEvent.loadData()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        realmEvent.loadData()
+        accountListTableView.reloadData()
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return realmEvent.results.count
     }
@@ -29,8 +34,19 @@ class UserDataViewController: UIViewController, UITableViewDelegate, UITableView
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "editDataSegue", sender: indexPath.row)
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        // 刪除
+        let deleteItem = UIContextualAction(style: .destructive, title: "Delete") {  (contextualAction, view, boolValue) in
+            self.realmEvent.deleteData(self.realmEvent.results[indexPath.row].uuid)
+            self.realmEvent.loadData()
+            self.accountListTableView.reloadData()
+        }
+        // 編輯
+        let editItem = UIContextualAction(style: .normal, title: "Edit") {  (contextualAction, view, boolValue) in
+            self.performSegue(withIdentifier: "editDataSegue", sender: indexPath.row)
+        }
+        let swipeActions = UISwipeActionsConfiguration(actions: [deleteItem, editItem])
+        return swipeActions
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -40,7 +56,7 @@ class UserDataViewController: UIViewController, UITableViewDelegate, UITableView
             }
         }
     }
-    
+
     
     /*
     // MARK: - Navigation
